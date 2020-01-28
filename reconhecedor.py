@@ -36,8 +36,7 @@ def reconhecer_faces(classificador):
     while True:
         conectado, imagem = camera.read()
         imagemCinza = None
-        if conectado:
-            imagemCinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+        imagemCinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
         facesDetectadas = detectorFace.detectMultiScale(imagemCinza, scaleFactor=1.5, minSize=(30, 30))  # Colocar minSize baixo se tiver capturado a face de uma imagem pequena (150 seria um valor normal para capturas de um rosto normal)
 
         # Message to user (how to exit the program)
@@ -56,8 +55,7 @@ def reconhecer_faces(classificador):
             cv2.putText(imagem, nome, (x, y + (a + 30)), font, 2, (0, 0, 255))  # Params: imagem, posicionamento do texto, fonte a usar, tamanho da fonte, cor da fonte
             cv2.putText(imagem, str(confianca), (x, y + (a + 50)), font, 1, (0, 0, 255))  # Params: imagem, posicionamento do texto, fonte a usar, tamanho da fonte, cor da fonte
 
-        if conectado == True:
-            cv2.imshow('Face Recognition', imagem)
+        cv2.imshow('Face Recognition', imagem)
         if cv2.waitKey(1) == ord('q'):  # Break the cicle when click "q" key
             break
 
