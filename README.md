@@ -131,12 +131,14 @@ python3 init.py
 Criar um script com o seguinte conteúdo (deverá aparecer um número de versão e em seguida
 uma listagem grande as funcionalidade do objeto "face"):
 
+```
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 import cv2
 
 print(cv2.__version__)
 help(cv2.face)
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+```
 
 ## Considerações finais e referências
 
