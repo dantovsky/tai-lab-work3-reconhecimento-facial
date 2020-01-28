@@ -1,5 +1,6 @@
 import cv2
 import globals
+import os
 
 # --------------------------------------------------------------------------------------------------------
 # Reconhecimento facial utilizando um dos três classificador: Eigenfaces, Fisherfaces ou o LBPH
@@ -24,12 +25,18 @@ def reconhecer_faces(classificador):
 
     larrgura, altura = 220, 220
     font = cv2.FONT_HERSHEY_COMPLEX_SMALL
-    camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
+    if os.name == 'nt':
+        camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        print('O sistema eh o ', os.name)
+    else:
+        camera = cv2.VideoCapture(0)
+        print('O sistema eh o ', os.name)
 
     while True:
         conectado, imagem = camera.read()
         imagemCinza = None
-        if conectado == True:
+        if conectado:
             imagemCinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
         facesDetectadas = detectorFace.detectMultiScale(imagemCinza, scaleFactor=1.5, minSize=(30, 30))  # Colocar minSize baixo se tiver capturado a face de uma imagem pequena (150 seria um valor normal para capturas de um rosto normal)
 
