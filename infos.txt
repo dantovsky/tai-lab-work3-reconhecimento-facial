@@ -1,0 +1,288 @@
+﻿Notas sobre o curso "Reconhecimento Facial com Python e OpenCV"
+
+------------------------------------------------------------------------
+Visão geral
+------------------------------------------------------------------------
+
+"Visão computacional simula a capacidade do olho humano"
+
+# Deteção vs Reconhecimento
+
+- deteção: apenas identifica se o objeto é um rosto humano
+- reconhecimento: além de identificar o rosto humano, reconhece a identidade da pessoa
+
+# Aplicações
+
+=> Deteção
+- contar pessoas num ambiente
+- alarmes
+- controle de tráfego em rodovias
+- obter o tamanho de um objeto
+- deteção de sorrisos em cam/ajuste de foco
+
+=> Reconhecimento
+- desbloqueio do celultar
+- sistemas de segurança
+- validação em cursos on-line
+- identificar bandidos
+
+# Algoritmos do OpenCV
+- Eigenfaces
+- Fisherfaces
+- LBPH (Local Binary Patterns Histograms)
+
+# Etapas para o reconhecimento
+- deteção de faces - marcar o quadrado no rosto da pessoa
+- coletar as fotos - (buscar as fotos pertencente à face da pessoa) inserir várias imagens da pessoa ao banco de imagens
+- treinar - realizar o aprendizado de máquina: passar uma codificação para os 3 algoritmos para serem treinados
+- reconhecer - fase do reconhecimento facial
+
+------------------------------------------------------------------------
+Requerimentos
+------------------------------------------------------------------------
+
+- Python3
+
+- NumPy
+    Deve ir até o seguinte caminho:
+    C:\Users\Dantiii\AppData\Local\Programs\Python\Python37-32\Scripts>
+    Rodar o comando:
+    pip install numpy (rodei a partir do CMD ao brir, pois no caminho acima deu-me erro)
+
+- PIL
+	Usado apenas na parte final do curso, na parte de avaliação dos algoritmos
+	Serve para fazer o carregamento de iamgens no Python
+	pip install pillow
+
+- OpenCV (procurar por "Unofficial Windows Binaries for Python Extension Packages")
+    https://www.lfd.uci.edu/~gohlke/pythonlibs/
+    Precisa fazer download da versão que tem descrito "contrib"
+    Instalei o pacote (tenho o Python 64 bits):
+    opencv_python-4.1.2+contrib-cp37-cp37m-win_amd64
+
+    Desinstalar outra versão do pencv-python:
+    pip unistall opencv_python
+
+    Foi indicado colocar o ficheiro acima no caminho:
+    C:\Users\Dantiii\AppData\Local\Programs\Python\Python37-32\Scripts>
+    E fazer:
+    pip install opencv_python-4.1.2+contrib-cp37-cp37m-win_amd64
+
+    (!) Deu-me erro, então coloquei o ficheiro dentro de C:\Users\Dantiii e rodei o comando de instalação, e funcionou
+
+    (!) Tive erros para rodar um programa de teste. Foi recomendado desinstalar o opencv e instalar pelo Pycharm:
+
+    Erro 1:
+    File "cam.py", line 1, in <module>
+        import cv2
+    ImportError: No module named cv2
+
+    Erro 2:
+    ImportError: numpy.core.multiarray failed to import
+
+    Caso esteja, recomendo instalar o OpenCV diretamente pelo Pycharm. 
+    Para isso, vá em: File > Settings > Project: "Nome do Projeto" e abra Project Interpreter. 
+    No lado superior direito clique em "+".
+    Pesquise na lupa por "opencv-contrib-python" e clique em "Install".
+
+    Outra coisa que da pra tentar é configurar o "path" nas variáveis de ambiente do Windows 
+    (painel de controle, sistema, configurações avançadas), edita a variável path e coloca o 
+    caminho de instalação do OpenCV. Mais infos nesse vídeo
+    https://www.youtube.com/watch?v=8tjMiImv-Kk
+
+## Programa de teste (testar se o opencv está corretamente instalado)
+
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+import cv2
+
+print(cv2.__version__)
+help(cv2.face)
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+Deverá fazer o print da versão do OpenCV e depois uma listagem grande das funções de reconhecimento facial.
+
+
+
+~ ~ ~ ~ ~ ~ ~ ~ ~ Coisas a incluir no relatório ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+--- Detectar as faces
+Esta fase consta em detectar as faces que estão presentes em frente a webcam.
+
+# haarcascade-frontalface-default => XML file to do the face training detection (arquivo para fazer o treinamento de deteção de faces)
+
+# imagemCinza = var to detect image in gray scale => better algorithm perforcance
+
+
+--- Coleta das imagens
+Nesta fase é feita a captura de fotos para posteriormente realizar o treinamento.
+
+Esta fase realiza o seguinte processo: quando a camera está em operação, presionamos uma tecla-chave para tirar uma amostra, de um total de 25 amostras, onde estas são armazenadas em disco.
+
+Ao iniciar o programa para a captura, é pedido um identificador, sendo armazenadas as imagens com a seguinte descrição:
+pessoa.{id}.{numero}.jpg
+
+Algumas recomendações a seguir durante a coleta das imagens:
+- As imagens para o treinamento são fundamentais para um reconhecimento eficiente. É importante que tenha boa luminosidade no ambiente.
+- Ensaio: tirar fotos com uma variabilidade grande de expressões (1ª foto a olhar para a camera, 2ª foto com a boca aberta, olhando para esquerda, pra direita, baixo, cima, fazer cara triste, sorrindo, com e sem óculos ...)
+- Ambiente bem iluminado (o algoritmo EigenFaces requer boa iluminação)
+- Fotos com luz incindindo no rosto
+
+
+--- Treinamento
+O algoritmo utiliza as fotos capturadas para aprender. Ele analisa cada uma das fotos das faces e encontra um determinado padrão.
+
+
+--- Reconhecimento
+Nesta fase, as imagens que foram treinadas são capazes de serem reconhecidas, dada a exposição de uma pessoa cuja imagens de sua face já foram previamente treinadas.
+
+
+------------------------------------------------------------------------
+Treinamento dos 3 classificadores
+------------------------------------------------------------------------
+
+Para o treinamento foram utilizaos 3 tipos de classificadores:
+
+- Eigen Face Recognizer
+- Fisher Face Recognizer
+- LBPH Face Recognizer
+
+Na parte do treinamento o algoritmo percorre todas as imagens, salva as faces e os IDs. É necessário converter as imagens para escala de cinza, porque o treinamento dos classificadores requerem escala de cinza para as imagens.
+Neste ponto as imagens já estão armazenadas no banco de imagens como escala de cinza, mas ainda assim é necessário converter a variável da face de imagem para escala de cinza.
+
+Após a obtenção de dois arrays contendo respetivamente as faces e os IDs, referente a cada pessoa detetada nas imagens, inicia-se o processo de treinamento chamando cada tipo de classificador (EigenFace, FisherFace e LBPHFace), onde são passados os dois arrays como parâmetro para uma função de treino e em seguida o resultado do treino é guardado em um ficheiro com extensão .yml.
+
+
+# Funcionamento dos Algoritmos
+------------------------------
+
+## Eigenfaces
+
+Captura partes específicas de várias imagens e depois faz um somatório e tira a média, considerando como sendo a imagem da pessoa.
+Eigenvextor - "vetor próprio" :: uma imagem é uma matrix de pixels com valores RGB e o conceito de eigen vector está relacionado a multiplicação de matrizes de vetores.
+Eigein value representa um valor como um número escalar em Álgebra.
+
+PCA (Principal Component Analysis) :: técnica de Machine Learning para trabalhar com a redução de dimensionalidade dos dados, ou conhecido também como "a seleção dos atributos". Com isso, permite remover informação inútil da imagem.
+
+Então extrai a face média: obtém todas as imagens de uma pessoa e extrai a média, considerando assim apenas os traços principais. Esse último processo permite verificar:
+- quanto as pessoas variam da média
+
+Ao final, este algoritmo irá extrair vários Eigenfaces para cada uma das pessoas.
+Em resumo, por meio de todos os Eigenfaces o algoritmo consegue chegar às imagens originais.
+Pontos importantes:
+- Cada face pode ser representada como a combinação linear de diversas eigenfaces.
+- A variação ajuda a diferenciar uma face da outra.
+- Considera a iluminação como uma característica importante.
+- Encontar vetores que melhor representam a distribuição das faces.
+- Eigenvector projeta as imagens de faces no espaço de faces (conjunto de todas as imagens (eigeinfaces) de todas as pessoas).
+
+Depois de estar treinado (explicação acima), passa para a fase de classificação.
+O Eigenface faz as etapas:
+- Projeta a imagem de teste no espaço de faces.
+- Extrai componentes eigenfaces da imagem.
+- Calcula a distância entre a nova face e as faces de treinamento (knn).
+- Busca nas imagens de treinamento pela mais semelhante.
+
+Então o Eigenfaces faz um cálculo das distâncias e busca a mais parecida.
+
+Link disponibilizado como recurso ao final desta aula:
+https://www.youtube.com/watch?v=KBh4vnsCDc4
+
+
+Mais sobre o Eigenfaces (na aula 17 sobre o Fisherfaces)
+
+- "O Eigenfaces olha para todas as imagens de todas as pessoas de uma vez e tenta encontrar componentes de todas elas combinadas".
+- Não foca nas características que distinguem um indivíduo do outro (faces da pessoa como um todo)
+- PCA foca na variação
+- A iluminação é um componente importante e pode descartar outras características
+
+
+## Fisherfaces
+
+- Utiliza LDA (Linear Discriminant Analysis), que também reduz as dimensões
+- LDA não está interessado na maior variação, mas em maximizar a separação entre as classes
+- Fisherfaces podem ser calculados usando o PCA ou regularização
+- Parâmetros OpenCV
+-- num_components :: num de componentes principais (a documentação indica que 50 é quase sempre suficiente), são a assinatura do rosto
+-- threshold :: limite de confiança / distância de uma face à outra (vizinho mais próximo - KNN)
+
+
+## LBPH
+- Dada uma matriz de uma imagem, para cada pixel, analisa os valores a volta de cada pixel para classificar em 0 ou 1 e ao final gera um número binário, que daí é obtido o seu decimal respectivo
+- O número decimal é usado para treinar o sistema, gerando um histograma dos valores (um histograma para cada face)
+- Esse algo. é responsável por encontrar a estrutura "local" da imagem por meio dos vizinhos
+- Gera o histograma para a nova imagem e compara com os histogramas da base de dados
+
+Parâmetros do LBPH:
+
+radius => raio de abrangência para realizar os cálculos na imagem
+- raio maior aumenta a abrangência mas pode perder bordas finas (pontos mais distantes)
+- quanto maior o raio mais padrões podem ser codificados, mas aumenta o esforço computacional
+
+neighbors => especifica o número de vizinhos para fazer o cálculo
+- nº de pontos da amostra para construir um padrão local
+- quanto maior o nº de vizinhos maior é o esforço computacional
+
+grid_x =>
+- nº de células na horizontal
+- quanto mais células maior é a dimensionalidade do vetor de características (histogramas)
+
+grid_y =>
+- nº de células na vertical
+- se a grade aumentar serão usados menos pixels em cada histograma (mais esparços)
+
+threshold =>
+- limite de confiança
+
+
+
+# COMPARACOES ENRE OS ALGORITMOS
+--------------------------------
+
+Fisher:
+- trabalha melhor com a questão da iluminação (não é tão exigente)
+- tem uma taxa de confiança melhor (threshold)
+
+LBPH:
+- mais robusco do que os outros algo. em relação a iluminação
+- melhor confiabilidade
+
+
+------------------------------------------------------------------------
+# Aula 14 - Reconhecimento facial com Eigenfaces
+------------------------------------------------------------------------
+
+Code para criar uma conexão com a câmera:
+
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+
+import cv2
+
+camera = cv2.VideoCapture(0)
+
+while (True):
+    conectado, imagem = camera.read()
+
+    cv2.imshow('Face', imagem)
+    cv2.waitKey(1)
+
+camera.release()
+cv2.destroyAllWindows()
+
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+
+
+------------------------------------------------------------------------
+# Aula 16 - Parâmetros do Eigenfaces
+------------------------------------------------------------------------
+
+num_components = número de eigenfaces que queremos gerar
+
+threshold = limite de confiança / distância (vizinho mais próximo - KNN)
+Faces detectadas com valor de threshold maior que o especificado são consideradas desconhecidas (retorna -1)
+Margem de erro que indica se uma face pertence a alguma classe da base de treinamento
+
+
+
+------------------------------------------------------------------------
+# Aula 21 - Reconhecimento facial com LBPH (Codificação)
+------------------------------------------------------------------------
