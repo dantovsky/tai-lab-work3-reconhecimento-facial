@@ -27,16 +27,15 @@ def reconhecer_faces(classificador):
     font = cv2.FONT_HERSHEY_COMPLEX_SMALL
 
     if os.name == 'nt':
-        camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-        print('O sistema eh o ', os.name)
+        camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # Para Windows
     else:
-        camera = cv2.VideoCapture(0)
-        print('O sistema eh o ', os.name)
+        camera = cv2.VideoCapture(0)  # Para outros sistemas (só foi testado em Linux)
 
     while True:
         conectado, imagem = camera.read()
         imagemCinza = None
         imagemCinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+
         facesDetectadas = detectorFace.detectMultiScale(imagemCinza, scaleFactor=1.5, minSize=(30, 30))  # Colocar minSize baixo se tiver capturado a face de uma imagem pequena (150 seria um valor normal para capturas de um rosto normal)
 
         # Message to user (how to exit the program)
